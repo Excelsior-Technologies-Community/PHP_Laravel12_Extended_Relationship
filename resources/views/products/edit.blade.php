@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Create Product</title>
+    <title>Edit Product</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -12,11 +12,11 @@
             margin: 0;
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #1e1e2f, #121223);
+            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            color: #fff;
         }
 
         .card {
@@ -25,17 +25,12 @@
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            transition: 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
         }
 
         h2 {
             text-align: center;
-            color: #5c5cff;
             margin-bottom: 20px;
+            color: #5c5cff;
         }
 
         label {
@@ -60,8 +55,8 @@
         }
 
         textarea {
-            height: 80px;
             resize: none;
+            height: 80px;
         }
 
         input:focus,
@@ -100,15 +95,6 @@
         .back:hover {
             color: #fff;
         }
-
-        .error {
-            background: #ff4c4c33;
-            color: #ff4c4c;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            font-size: 13px;
-        }
     </style>
 
 </head>
@@ -119,56 +105,36 @@
 
         <a href="{{ route('products.index') }}" class="back">← Back to Dashboard</a>
 
-        <h2>Create Product</h2>
+        <h2>Edit Product</h2>
 
-        @if($errors->any())
-        @foreach($errors->all() as $error)
-        <div class="error">{{ $error }}</div>
-        @endforeach
-        @endif
-
-        <form action="{{ route('products.store') }}" method="POST">
+        <form action="{{ route('products.update',$product->id) }}" method="POST">
 
             @csrf
+            @method('PUT')
 
             <label>Product Name</label>
-            <input type="text" name="name" placeholder="Enter product name" required>
+            <input type="text" name="name" value="{{ $product->name }}">
 
             <label>Description</label>
-            <textarea name="description" placeholder="Enter product description"></textarea>
+            <textarea name="description">{{ $product->description }}</textarea>
 
             <label>Creator</label>
             <select name="created_by">
-                <option value="">Select Manager</option>
-                @foreach($managers as $manager)
-                <option value="{{ $manager->id }}">{{ $manager->name }}</option>
-                @endforeach
-            </select>
-
-            <label>Updater</label>
-            <select name="updated_by">
-                <option value="">Select Manager</option>
-                @foreach($managers as $manager)
-                <option value="{{ $manager->id }}">{{ $manager->name }}</option>
-                @endforeach
-            </select>
-
-            <label>Deleter</label>
-            <select name="deleted_by">
-                <option value="">Select Manager</option>
-                @foreach($managers as $manager)
-                <option value="{{ $manager->id }}">{{ $manager->name }}</option>
+                @foreach($managers as $m)
+                <option value="{{ $m->id }}" {{ $product->created_by == $m->id ? 'selected':'' }}>
+                    {{ $m->name }}
+                </option>
                 @endforeach
             </select>
 
             <label>Status</label>
             <select name="status">
-                <option value="Active">Active</option>
-                <option value="In Review">In Review</option>
-                <option value="Archived">Archived</option>
+                <option value="Active" {{ $product->status=='Active'?'selected':'' }}>Active</option>
+                <option value="In Review" {{ $product->status=='In Review'?'selected':'' }}>In Review</option>
+                <option value="Archived" {{ $product->status=='Archived'?'selected':'' }}>Archived</option>
             </select>
 
-            <button type="submit">Create Product</button>
+            <button type="submit">Update Product</button>
 
         </form>
 
