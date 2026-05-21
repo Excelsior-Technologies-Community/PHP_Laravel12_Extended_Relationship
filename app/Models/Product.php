@@ -9,9 +9,15 @@ class Product extends Model
 {
     use HasExtendedRelationships;
 
-    protected $fillable = ['name','description','created_by','updated_by','deleted_by'];
+    protected $fillable = [
+        'name',
+        'description',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+        'status'
+    ];
 
-    // Extended relationship for multiple foreign keys
     public function managers()
     {
         return $this->belongsToManyKeys(
