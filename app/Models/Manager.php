@@ -4,12 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use MrPunyapal\LaravelExtendedRelationships\HasExtendedRelationships;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Manager extends Model
 {
     use HasExtendedRelationships;
 
     protected $fillable = ['name'];
+
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 
     // Reverse relation
     public function auditedProducts()

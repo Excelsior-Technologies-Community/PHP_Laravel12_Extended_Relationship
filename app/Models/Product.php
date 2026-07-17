@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use MrPunyapal\LaravelExtendedRelationships\HasExtendedRelationships;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Product extends Model
 {
@@ -17,6 +18,11 @@ class Product extends Model
         'deleted_by',
         'status'
     ];
+
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 
     public function managers()
     {
